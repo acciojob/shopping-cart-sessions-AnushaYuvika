@@ -1,5 +1,3 @@
-// This is the boilerplate code given for you
-// You can modify this code
 // Product data
 const products = [
   { id: 1, name: "Product 1", price: 10 },
@@ -9,30 +7,80 @@ const products = [
   { id: 5, name: "Product 5", price: 50 },
 ];
 
-// DOM elements
+// DOM Elements
 const productList = document.getElementById("product-list");
+const cartList = document.getElementById("cart-list");
+const clearBtn = document.getElementById("clear-cart-btn");
 
-// Render product list
+// Render Product List
 function renderProducts() {
+
   products.forEach((product) => {
+
     const li = document.createElement("li");
-    li.innerHTML = `${product.name} - $${product.price} <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>`;
+
+    li.innerHTML = `
+      ${product.name} - $${product.price}
+      <button>Add to Cart</button>
+    `;
+
+    const button = li.querySelector("button");
+
+    button.addEventListener("click", () => {
+      addToCart(product.id);
+    });
+
     productList.appendChild(li);
+
   });
+
 }
 
-// Render cart list
-function renderCart() {}
+// Render Cart
+function renderCart() {
 
-// Add item to cart
-function addToCart(productId) {}
+  cartList.innerHTML = "";
 
-// Remove item from cart
-function removeFromCart(productId) {}
+  const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
-// Clear cart
-function clearCart() {}
+  cart.forEach((product) => {
 
-// Initial render
+    const li = document.createElement("li");
+
+    li.innerHTML = `${product.name} - $${product.price}`;
+    cartList.appendChild(li);
+
+  });
+
+}
+
+// Add Item
+function addToCart(productId) {
+
+  const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+  const product = products.find((item) => item.id === productId);
+
+  cart.push(product);
+
+  sessionStorage.setItem("cart", JSON.stringify(cart));
+
+  renderCart();
+
+}
+
+
+// Clear Cart
+function clearCart() {
+
+  sessionStorage.removeItem("cart");
+
+  renderCart();
+
+}
+
+clearBtn.addEventListener("click", clearCart);
+
+// Initial Render
 renderProducts();
 renderCart();
