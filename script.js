@@ -14,69 +14,45 @@ const clearBtn = document.getElementById("clear-cart-btn");
 
 // Render Product List
 function renderProducts() {
-
   products.forEach((product) => {
-
     const li = document.createElement("li");
-
     li.innerHTML = `
       ${product.name} - $${product.price}
       <button>Add to Cart</button>
     `;
-
     const button = li.querySelector("button");
-
     button.addEventListener("click", () => {
       addToCart(product.id);
     });
-
     productList.appendChild(li);
-
   });
-
 }
 
 // Render Cart
 function renderCart() {
-
   cartList.innerHTML = "";
-
   const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-
   cart.forEach((product) => {
-
     const li = document.createElement("li");
-
     li.innerHTML = `${product.name} - $${product.price}`;
     cartList.appendChild(li);
-
   });
-
 }
 
 // Add Item
 function addToCart(productId) {
-
   const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-
   const product = products.find((item) => item.id === productId);
-
   cart.push(product);
-
   sessionStorage.setItem("cart", JSON.stringify(cart));
-
   renderCart();
-
 }
 
 
 // Clear Cart
 function clearCart() {
-
   sessionStorage.removeItem("cart");
-
   renderCart();
-
 }
 
 clearBtn.addEventListener("click", clearCart);
